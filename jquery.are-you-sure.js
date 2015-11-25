@@ -73,9 +73,12 @@
 
       var isFieldDirty = function($field) {
         var origValue = $field.data('ays-orig');
+        /*
+        // This is disabled, to ensure dynamically added input[type=file] are checked.
         if (undefined === origValue) {
           return false;
         }
+        */
         return (getValue($field) != origValue);
       };
 
@@ -116,8 +119,8 @@
     var initForm = function($form) {
       var fields = $form.find(settings.fieldSelector);
       $(fields).each(function() { storeOrigValue($(this)); });
-      $(fields).unbind(settings.fieldEvents, checkForm);
-      $(fields).bind(settings.fieldEvents, checkForm);
+      $form.off(settings.fieldEvents, settings.fieldSelector, checkForm)
+      $form.on(settings.fieldEvents, settings.fieldSelector, checkForm)
       $form.data("ays-orig-field-count", $(fields).length);
       setDirtyStatus($form, false);
     };
