@@ -21,6 +21,7 @@
         'change' : null,
         'silent' : false,
         'addRemoveFieldsMarksDirty' : false,
+        'unloadEvents': 'beforeunload',
         'fieldEvents' : 'change keyup propertychange input',
         'fieldSelector': ":input:not(input[type=submit]):not(input[type=button])"
       }, options);
@@ -155,7 +156,7 @@
 
     if (!settings.silent && !window.aysUnloadSet) {
       window.aysUnloadSet = true;
-      $(window).bind('beforeunload', function() {
+      $(window).bind(settings.unloadEvents, function() {
         $dirtyForms = $("form").filter('.' + settings.dirtyClass);
         if ($dirtyForms.length == 0) {
           return;
@@ -168,7 +169,7 @@
           window.aysHasPrompted = true;
           window.setTimeout(function() {window.aysHasPrompted = false;}, 900);
         }
-        return settings.message;
+        return confirm(settings.message);
       });
     }
 
