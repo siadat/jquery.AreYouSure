@@ -19,6 +19,8 @@
         'message' : 'You have unsaved changes!',
         'dirtyClass' : 'dirty',
         'change' : null,
+        'onConfirm': null,
+        'onAbort': null,
         'silent' : false,
         'addRemoveFieldsMarksDirty' : false,
         'unloadEvents': 'beforeunload',
@@ -172,7 +174,13 @@
           window.aysHasPrompted = true;
           window.setTimeout(function() {window.aysHasPrompted = false;}, 900);
         }
-        return confirm(settings.message);
+        var response = confirm(settings.message);
+        if(response) {
+          if(settings.onConfirm) { settings.onConfirm.call(); }
+        } else {
+          if(settings.onAbort) { settings.onAbort.call(); }
+        }
+        return response;
       });
     }
 
